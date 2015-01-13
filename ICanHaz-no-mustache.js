@@ -1,8 +1,7 @@
 /*!
 ICanHaz.js version 0.10.2 -- by @HenrikJoreteg
 More info at: http://icanhazjs.com
-*/
-(function () {
+*/(function () {
 /*!
   ICanHaz.js -- by @HenrikJoreteg
 */
@@ -71,14 +70,16 @@ More info at: http://icanhazjs.com
         grabTemplates: function () {
             var i,
                 l,
-                scripts = document.getElementsByTagName('script'),
-                script,
+                s = Array.prototype.slice,
+                g = document.getElementsByTagName.bind(document),
+                elems = s.apply(g('script')).concat(s.apply(g('template'))),
+                el,
                 trash = [];
-            for (i = 0, l = scripts.length; i < l; i++) {
-                script = scripts[i];
-                if (script && script.innerHTML && script.id && (script.type === "text/html" || script.type === "text/x-icanhaz")) {
-                    ich.addTemplate(script.id, trim(script.innerHTML));
-                    trash.unshift(script);
+            for (i = 0, l = elems.length; i < l; i++) {
+                el = elems[i];
+                if (el && el.innerHTML && el.id && (el.type === "text/html" || el.type === "text/x-icanhaz" || el.content)) {
+                    ich.addTemplate(el.id, trim(el.innerHTML));
+                    trash.unshift(el);
                 }
             }
             for (i = 0, l = trash.length; i < l; i++) {

@@ -6,11 +6,11 @@ function isEmptyObject( obj ) {
 }
 
 function raw( ich ) {
-		return ich.$ === undefined
+    return ich.$ === undefined;
 }
 
 function first( results ) {
-		return results instanceof Object ? results.get(0).outerHTML : results
+    return results instanceof Object ? results.get(0).outerHTML : results;
 }
 
 module("ICanHaz");
@@ -122,4 +122,17 @@ test("can add multiple templates at once", function () {
     ich.addTemplate(templates);
     equal(first(ich.first(obj, raw(ich))), '<p>first bob</p>');
     ok(first(ich.second(obj, raw(ich))), '<p>second bob</p>');
+});
+
+test("grabs &lt;template&gt; tags too", function() {
+  // not recommended use, but should work nonetheless
+  var msg = '<p>I are seriose template!</p>',
+      el = document.createElement('template');
+  el.id = 'tpltag';
+  el.innerHTML = msg.replace('seriose', '{{what}}');
+  document.body.appendChild(el);
+
+  ich.refresh();
+
+  equal(first(ich.tpltag({what: 'seriose'}, raw(ich))), msg, "should have new template");
 });
